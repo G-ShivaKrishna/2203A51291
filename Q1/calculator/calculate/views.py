@@ -13,8 +13,28 @@ VALID_IDS={
 }
 number_windows={key: deque(maxlen=WINDOW_SIZE) for key in VALID_IDS}
 
+import requests
+
 def get_token():
-    return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiZXhwIjoxNzQ5NzA5NTc2LCJpYXQiOjE3NDk3MDkyNzYsImlzcyI6IkFmZm9yZG1lZCIsImp0aSI6IjNjZTQ3YjRhLWM0ZGMtNGIxNS1iMzI5LTIxMmQ5NzBmNTIyZiIsInN1YiI6IjIyMDNhNTEyOTFAc3J1LmVkdS5pbiJ9LCJlbWFpbCI6IjIyMDNhNTEyOTFAc3J1LmVkdS5pbiIsIm5hbWUiOiJnb3R0aW11a2t1bGEgc2hpdmEga3Jpc2huYSByZWRkeSIsInJvbGxObyI6IjIyMDNhNTEyOTEiLCJhY2Nlc3NDb2RlIjoiTVZHd0VGIiwiY2xpZW50SUQiOiIzY2U0N2I0YS1jNGRjLTRiMTUtYjMyOS0yMTJkOTcwZjUyMmYiLCJjbGllbnRTZWNyZXQiOiJFVVRVZ1F0eGRTbXdraGhjIn0.hklGo4XQ1PlXmjdhf3ygaD9ntFPtVii1jbrLFmM0UX0"
+    url = "http://20.244.56.144/evaluation-service/auth"
+    payload = {
+        "email": "2203a51291@sru.edu.in",
+        "name": "gottimukkula shiva krishna reddy",
+        "rollNo": "2203a51291",
+        "accessCode": "MVGwEF",
+        "clientID": "3ce47b4a-c4dc-4b15-b329-212d970f522f",
+        "clientSecret": "EUTUgQtxdSmwkhhc"
+    }
+    try:
+        res = requests.post(url, json=payload, timeout=5)
+        print("Status Code:",res.status_code)
+        print("Response Text:",res.text)
+        if res.status_code==201:
+            return res.json().get("access_token")
+    except Exception as e:
+        print("Error:", e)
+    return None
+
 
 def fetch_numbers_from_api(identifier):
     token=get_token()
